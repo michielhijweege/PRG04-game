@@ -1,55 +1,89 @@
-import { Actor, Vector } from "excalibur"
+import { Actor, Vector, Input } from "excalibur"
 import {Resources} from "./resources.js";
-import {Movebox} from "./movebox.js";
+import {Wall} from "./wall.js";
+import {Box} from "./box.js";
 
 export class Player extends Actor{
-    beurt = true
-    zetover = 2
-    levens = 6
+    zetover = 5
+    leven = 5
+    oldpos
+    boxmanager
+    world
 
     onInitialize(_engine) {
         super.onInitialize(_engine);
-        this.graphics.use(Resources.Fish.toSprite())
+        this.graphics.use(Resources.Player.toSprite())
         this.pos = new Vector(400, 304)
-
-        // North move
-        let moveN1 = new Movebox(0, -32)
-        this.addChild(moveN1)
-        let moveN2 = new Movebox(0, -64)
-        this.addChild(moveN2)
-
-        // East move
-        let moveE1 = new Movebox(32, 0)
-        this.addChild(moveE1)
-        let moveE2 = new Movebox(64, 0)
-        this.addChild(moveE2)
-
-        // South move
-        let moveS1 = new Movebox(0, 32)
-        this.addChild(moveS1)
-        let moveS2 = new Movebox(0, 64)
-        this.addChild(moveS2)
-
-        // West move
-        let moveW1 = new Movebox(-32, 0)
-        this.addChild(moveW1)
-        let moveW2 = new Movebox(-64, 0)
-        this.addChild(moveW2)
+        this.on('precollision', (event) => this.hitSomething(event))
+        this.boxmanager = new Box(this)
+        this.addChild(this.boxmanager)
     }
 
-    constructor() {
-        super();
+    onPreUpdate(_engine, _delta) {
+        super.onPreUpdate(_engine, _delta);
+        if(this.world.playersbeurt){
+            if (_engine.input.keyboard.wasPressed(Input.Keys.R))
+            {
+                this.boxmanager.spawnSwordbox()
+            }
+            if (_engine.input.keyboard.wasPressed(Input.Keys.F))
+            {
+                this.boxmanager.spawnspearbox()
+            }
+            if (_engine.input.keyboard.wasPressed(Input.Keys.T))
+            {
+                this.boxmanager.spawnmovebox()
+            }
+        }
+
+        //debug leven
+        if (_engine.input.keyboard.wasPressed(Input.Keys.ArrowDown))
+        {
+            this.damage(1)
+        }
+        if (_engine.input.keyboard.wasPressed(Input.Keys.ArrowUp))
+        {
+            this.heal(1)
+        }
     }
 
-    move(x,y){
-        if(this.beurt){
-            console.log(x + ' ' + y)
-            console.log('er is nog ' + this.zetover + ' zets over')
+    constructor(setworld) {
+        super({width:1, height:1});
+        this.world = setworld
+    }
+
+    //move player to position and save te old position
+    move(x, y, oldx, oldy){
+        if(this.world.playersbeurt){
+            this.oldpos = new Vector(oldx, oldy)
             this.pos = new Vector(x, y)
             this.zetover -= 1
         }
         if(this.zetover === 0){
-            this.beurt = false
+            this.world.playersbeurt = false
+            this.boxmanager.removebox()
         }
+    }
+
+    //check if player is inside wall and reset zet
+    hitSomething(event){
+        if(event.other instanceof Wall) {
+            if(this.oldpos){
+                this.pos = this.oldpos
+            }
+            this.zetover += 1
+        }
+    }
+
+    //take leven
+    damage(damage){
+        this.leven -= damage
+        this.world.updatelevenui()
+    }
+
+    //give leven
+    heal(healing){
+        this.leven += healing
+        this.world.updatelevenui()
     }
 }

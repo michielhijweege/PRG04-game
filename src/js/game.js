@@ -1,9 +1,7 @@
 import '../css/style.css'
-import {Actor, Engine, randomIntInRange, Vector} from "excalibur"
+import {Actor, Engine, Scene} from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
-import {Player} from "./player.js";
-import {Wall} from "./wall.js";
-import {Indistructeblewall} from "./indistructeblewall.js";
+import {Mainmenu} from "./mainmenu.js";
 
 export class Game extends Engine {
     constructor() {
@@ -11,37 +9,13 @@ export class Game extends Engine {
         this.start(ResourceLoader).then(() => this.startGame())
     }
 
-    startGame() {
+    startGame(engine) {
         console.log("start de game!")
-        const player = new Player()
-        this.add(player)
 
-        // spawn border
-        for (let x = 0; x < 25; x++)
-        {
-            for (let y = 0; y < 20; y++)
-            {
-            let indistructeblewall = new Indistructeblewall(x * 32 + 16 , y * 32 + 16)
-                if(x === 0 || x === 24 || y === 0 || y === 19)
-                {
-                    this.add(indistructeblewall)
-                }
-            }
-        }
+        this.add("mainmenu", new Mainmenu());
+        this.goToScene("mainmenu");
 
-        // spawn random wall
-        for (let x = 0; x < 25; x++)
-        {
-            for (let y = 0; y < 20; y++)
-            {
-                let wall = new Wall(x * 32 + 16 , y * 32 + 16)
-                if(randomIntInRange(1,100) > 50)
-                {
-                        this.add(wall)
-                }
-            }
-        }
-
+        //this.showDebug(true)
     }
 }
 
