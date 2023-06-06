@@ -20,6 +20,10 @@ import attackspearImage from '../images/attackspear.png'
 import exitopenImage from '../images/exitopen.png'
 import exitcloseImage from '../images/exitclose.png'
 import startbuttonImage from '../images/startbutton.png'
+import beginbackgrounImage from '../images/backgroundmenu.png'
+import endbackgrounImage from '../images/deadbackground.png'
+import menuImage from '../images/menu.png'
+import retryImage from '../images/Retry.png'
 
 const Resources = {
     Player: new ImageSource(playerImage),
@@ -42,7 +46,11 @@ const Resources = {
     AttackSpear: new ImageSource(attackspearImage),
     Exitopen: new ImageSource(exitopenImage),
     Exitclose: new ImageSource(exitcloseImage),
-    Startbutton: new ImageSource(startbuttonImage)
+    Startbutton: new ImageSource(startbuttonImage),
+    Beginackground: new ImageSource(beginbackgrounImage),
+    Endbackground: new ImageSource(endbackgrounImage),
+    Menu: new ImageSource(menuImage),
+    Retry: new ImageSource(retryImage)
 }
 const ResourceLoader = new Loader([
     Resources.Player,
@@ -65,7 +73,11 @@ const ResourceLoader = new Loader([
     Resources.AttackSpear,
     Resources.Exitopen,
     Resources.Exitclose,
-    Resources.Startbutton
+    Resources.Startbutton,
+    Resources.Beginackground,
+    Resources.Endbackground,
+    Resources.Menu,
+    Resources.Retry
 ])
 
 export { Resources, ResourceLoader }

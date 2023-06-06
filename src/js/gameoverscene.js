@@ -3,20 +3,30 @@ import {Resources} from "./resources.js";
 import {Gamescene} from "./gamescene.js";
 import {Mainmenu} from "./mainmenu.js";
 import {Score} from "./score.js";
+import {Background} from "./background.js";
 
 export class Gameoverscene extends Scene {
 
     onInitialize(_engine ) {
         this.engine = _engine
+
+        // spawn background
+        let background = new Actor({
+            x: _engine.halfDrawWidth,
+            y: _engine.halfDrawHeight,
+        })
+        _engine.add(background)
+        background.graphics.use(Resources.Endbackground.toSprite())
+
         //retry button
         const retrybutton = new Actor({
             x: _engine.halfDrawWidth,
-            y: _engine.halfDrawHeight - 60,
+            y: _engine.halfDrawHeight + 120,
             width: Resources.Startbutton.width,
             height: Resources.Startbutton.height,
             color: Color.Magenta,
         });
-        retrybutton.graphics.use(Resources.Startbutton.toSprite())
+        retrybutton.graphics.use(Resources.Retry.toSprite())
         retrybutton.enableCapturePointer = true
         retrybutton.pointer.useGraphicsBounds = true
         retrybutton.on("pointerdown", (event) => this.gotogame())
@@ -25,12 +35,12 @@ export class Gameoverscene extends Scene {
         //menu button
         const menubutton = new Actor({
             x: _engine.halfDrawWidth,
-            y: _engine.halfDrawHeight,
+            y: _engine.halfDrawHeight + 180,
             width: Resources.Startbutton.width,
             height: Resources.Startbutton.height,
             color: Color.Magenta,
         });
-        menubutton.graphics.use(Resources.Startbutton.toSprite())
+        menubutton.graphics.use(Resources.Menu.toSprite())
         menubutton.enableCapturePointer = true
         menubutton.pointer.useGraphicsBounds = true
         menubutton.on("pointerdown", (event) => this.gotomenu())

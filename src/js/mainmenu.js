@@ -10,6 +10,15 @@ export class Mainmenu extends Scene {
 
     onInitialize(_engine ) {
         this.engine = _engine
+
+        // spawn background
+        let background = new Actor({
+            x: _engine.halfDrawWidth,
+            y: _engine.halfDrawHeight,
+        })
+        _engine.add(background)
+        background.graphics.use(Resources.Beginackground.toSprite())
+
         const actor = new Actor({
             x: _engine.halfDrawWidth,
             y: _engine.halfDrawHeight,
@@ -34,7 +43,8 @@ export class Mainmenu extends Scene {
                 family: 'impact',
                 size: 16,
                 unit: FontUnit.Px,
-                textAlign: TextAlign.Center
+                textAlign: TextAlign.Center,
+                color: Color.Yellow
             })
         });
         this.add(this.labelleven);
